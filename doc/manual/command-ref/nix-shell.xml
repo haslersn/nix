@@ -109,7 +109,11 @@ also <xref linkend="sec-common-options" />.</phrase></para>
     <literal>return</literal> at the end; e.g. <literal>--command
     "echo Hello; return"</literal> will print <literal>Hello</literal>
     and then drop you into the interactive shell. This can be useful
-    for doing any additional initialisation.</para></listitem>
+    for doing any additional initialisation. If ran interactive and
+    none of <option>--run</option> and <option>--command</option> are
+    used but <envar>NIX_SHELL_INTERACTIVE_SHELL</envar> is set, then
+    <literal>--command "$NIX_SHELL_INTERACTIVE_SHELL"</literal> is
+    implied.</para></listitem>
 
   </varlistentry>
 

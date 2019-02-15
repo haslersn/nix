@@ -113,6 +113,7 @@ static void _main(int argc, char * * argv)
             if (std::regex_search(lines.front(), std::regex("^#!"))) {
                 lines.pop_front();
                 inShebang = true;
+                interactive = false;
                 for (int i = 2; i < argc; ++i)
                     savedArgs.push_back(argv[i]);
                 args.clear();
@@ -193,7 +194,6 @@ static void _main(int argc, char * * argv)
 
         else if (inShebang && *arg == "-i") {
             auto interpreter = getArg(*arg, arg, end);
-            interactive = false;
             auto execArgs = "";
 
             // Überhack to support Perl. Perl examines the shebang and
@@ -402,6 +402,10 @@ static void _main(int argc, char * * argv)
                 env[var.first] = var.second;
 
         restoreAffinity();
+
+        if (interactive && envCommand.empty()) {
+            envCommand = "[ ! -z \"$NIX_SHELL_INTERACTIVE_SHELL\" ] && \"$NIX_SHELL_INTERACTIVE_SHELL\"\nexit";
+        }
 
         /* Run a shell using the derivation's environment.  For
            convenience, source $stdenv/setup to setup additional
